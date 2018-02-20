@@ -33,21 +33,27 @@ ${build_dir}/src/board.o: src/board.cpp | ${build_dir}/src
 	g++ ${flags} -c src/board.cpp -o ${build_dir}/src/board.o
 ${build_dir}/src:
 	mkdir -p $@
-${build_dir}/test/test_main.o: test/test_main.cpp | ${build_dir}/test 
-	g++ ${gtest_flags} ${flags} -c test/test_main.cpp -o ${build_dir}/test/test_main.o
+${build_dir}/src/heur.o: src/heur.cpp | ${build_dir}/src 
+	g++ ${flags} -c src/heur.cpp -o ${build_dir}/src/heur.o
+${build_dir}/src/algo.o: src/algo.cpp | ${build_dir}/src 
+	g++ ${flags} -c src/algo.cpp -o ${build_dir}/src/algo.o
+${build_dir}/test/test_gen.o: test/test_gen.cpp | ${build_dir}/test 
+	g++ ${gtest_flags} ${flags} -c test/test_gen.cpp -o ${build_dir}/test/test_gen.o
 ${build_dir}/test:
 	mkdir -p $@
+${build_dir}/test/test_main.o: test/test_main.cpp | ${build_dir}/test 
+	g++ ${gtest_flags} ${flags} -c test/test_main.cpp -o ${build_dir}/test/test_main.o
 ${build_dir}/test/test_solve.o: test/test_solve.cpp | ${build_dir}/test 
 	g++ ${gtest_flags} ${flags} -c test/test_solve.cpp -o ${build_dir}/test/test_solve.o
 ${build_dir}/${gtest_dir}/src/gtest-all.o: ${gtest_dir}/src/gtest-all.cc | ${build_dir}/${gtest_dir}/src 
 	g++ ${gtest_flags} -c ${gtest_dir}/src/gtest-all.cc -o ${build_dir}/${gtest_dir}/src/gtest-all.o
 ${build_dir}/${gtest_dir}/src:
 	mkdir -p $@
-${build_dir}/utest: ${build_dir}/src/board.o ${build_dir}/test/test_main.o ${build_dir}/test/test_solve.o ${build_dir}/${gtest_dir}/src/gtest-all.o  | ${build_dir}
-	g++ ${build_dir}/src/board.o ${build_dir}/test/test_main.o ${build_dir}/test/test_solve.o ${build_dir}/${gtest_dir}/src/gtest-all.o  ${link_flags} -o ${build_dir}/utest
+${build_dir}/utest: ${build_dir}/src/board.o ${build_dir}/src/heur.o ${build_dir}/src/algo.o ${build_dir}/test/test_gen.o ${build_dir}/test/test_main.o ${build_dir}/test/test_solve.o ${build_dir}/${gtest_dir}/src/gtest-all.o  | ${build_dir}
+	g++ ${build_dir}/src/board.o ${build_dir}/src/heur.o ${build_dir}/src/algo.o ${build_dir}/test/test_gen.o ${build_dir}/test/test_main.o ${build_dir}/test/test_solve.o ${build_dir}/${gtest_dir}/src/gtest-all.o  ${link_flags} -o ${build_dir}/utest
 ${build_dir}:
 	mkdir -p $@
-deps:=${build_dir}/src/board.d ${build_dir}/test/test_main.d ${build_dir}/test/test_solve.d ${build_dir}/${gtest_dir}/src/gtest-all.d 
+deps:=${build_dir}/src/board.d ${build_dir}/src/heur.d ${build_dir}/src/algo.d ${build_dir}/test/test_gen.d ${build_dir}/test/test_main.d ${build_dir}/test/test_solve.d ${build_dir}/${gtest_dir}/src/gtest-all.d 
 
 .PHONY: clean
 clean:

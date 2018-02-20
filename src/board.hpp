@@ -84,16 +84,7 @@ public:
 
 
 using Board = BoardTmpl<uint>;
-
 using BoardNote = BoardTmpl<CellNote>;
-
-typedef void (*HeurFunc)(const Board& board, uint id, uint jd, BoardNote& note);
-using HeurList = std::vector<HeurFunc>;
-void heur_exclu(const Board& board, uint id, uint jd, BoardNote& note);
-void heur_single_choice(const Board& board, uint id, uint jd, BoardNote& note);
-
-BoardNote init_note(const Board& board, const HeurList& hlist);
-bool solve_one(Board& board, BoardNote& note, const HeurList& hlist);
 
 
 std::ostream& operator<<(std::ostream& os, const Board& board);
