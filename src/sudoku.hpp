@@ -1,5 +1,5 @@
 #pragma once
 
-#include "board.hpp"
+#include "grid.hpp"
 #include "heur.hpp"
 #include "algo.hpp"

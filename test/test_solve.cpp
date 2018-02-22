@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include "sudoku.hpp"
 
-TEST(test_solve, print_board)
+TEST(test_solve, print_grid)
 {
-    Board board({
+    Grid grid({
         5, 3, 0, 0, 7, 0, 0, 0, 0,  //
         6, 0, 0, 1, 9, 5, 0, 0, 0,  //
         0, 9, 8, 0, 0, 0, 0, 6, 0,  //
@@ -15,12 +15,12 @@ TEST(test_solve, print_board)
         0, 0, 0, 0, 8, 0, 0, 7, 9   //
 
     });
-    std::cout << board << std::endl;
+    std::cout << grid << std::endl;
 }
 
-TEST(test_solve, print_board_heur)
+TEST(test_solve, print_grid_heur)
 {
-    Board board({
+    Grid grid({
         5, 3, 0, 0, 7, 0, 0, 0, 0,  //
         6, 0, 0, 1, 9, 5, 0, 0, 0,  //
         0, 9, 8, 0, 0, 0, 0, 6, 0,  //
@@ -32,18 +32,18 @@ TEST(test_solve, print_board_heur)
         0, 0, 0, 0, 8, 0, 0, 7, 9   //
 
     });
-    std::cout << board << std::endl;
+    std::cout << grid << std::endl;
 
-    auto note = init_note(board, {heur_exclu});
+    auto note = init_note(grid, {heur_exclu});
     std::cout << note << std::endl;
 
-    note = init_note(board, {heur_exclu, heur_single_choice});
+    note = init_note(grid, {heur_exclu, heur_single_choice});
     std::cout << note << std::endl;
 }
 
 TEST(test_solve, simple_solve1)
 {
-    Board board({
+    Grid grid({
         5, 3, 0, 0, 7, 0, 0, 0, 0,  //
         6, 0, 0, 1, 9, 5, 0, 0, 0,  //
         0, 9, 8, 0, 0, 0, 0, 6, 0,  //
@@ -55,16 +55,16 @@ TEST(test_solve, simple_solve1)
         0, 0, 0, 0, 8, 0, 0, 7, 9   //
 
     });
-    std::cout << board << std::endl;
-    auto note = init_note(board, {heur_exclu});
+    std::cout << grid << std::endl;
+    auto note = init_note(grid, {heur_exclu});
     std::cout << note << std::endl;
-    ASSERT_TRUE(solve_one(board, note, {heur_exclu}));
-    std::cout << board << std::endl;
+    ASSERT_TRUE(solve_one(grid, note, {heur_exclu}));
+    std::cout << grid << std::endl;
 }
 
 TEST(test_solve, simple_solve2)
 {
-    Board board({
+    Grid grid({
         5, 3, 0, 0, 7, 0, 0, 0, 0,  //
         6, 0, 0, 1, 9, 5, 0, 0, 0,  //
         0, 9, 8, 0, 0, 0, 0, 6, 0,  //
@@ -76,17 +76,17 @@ TEST(test_solve, simple_solve2)
         0, 0, 0, 0, 8, 0, 0, 7, 9   //
 
     });
-    std::cout << board << std::endl;
+    std::cout << grid << std::endl;
     HeurList hlist = {heur_exclu, heur_single_choice};
-    auto note = init_note(board, hlist);
+    auto note = init_note(grid, hlist);
     std::cout << note << std::endl;
-    ASSERT_TRUE(solve_one(board, note, hlist));
-    std::cout << board << std::endl;
+    ASSERT_TRUE(solve_one(grid, note, hlist));
+    std::cout << grid << std::endl;
 }
 
 TEST(test_solve, complex_solve1)
 {
-    Board board({
+    Grid grid({
         0, 0, 8, 5, 0, 0, 4, 0, 2,  //
         0, 5, 0, 1, 0, 0, 0, 0, 0,  //
         0, 0, 0, 0, 2, 0, 0, 0, 9,  //
@@ -97,16 +97,16 @@ TEST(test_solve, complex_solve1)
         0, 0, 0, 0, 0, 7, 0, 8, 0,  //
         8, 0, 9, 0, 0, 2, 7, 0, 0,  //
     });
-    std::cout << board << std::endl;
-    auto note = init_note(board, {heur_exclu});
+    std::cout << grid << std::endl;
+    auto note = init_note(grid, {heur_exclu});
     std::cout << note << std::endl;
-    ASSERT_TRUE(solve_one(board, note, {heur_exclu}));
-    std::cout << board << std::endl;
+    ASSERT_TRUE(solve_one(grid, note, {heur_exclu}));
+    std::cout << grid << std::endl;
 }
 
 TEST(test_solve, complex_solve2)
 {
-    Board board({
+    Grid grid({
         0, 0, 8, 5, 0, 0, 4, 0, 2,  //
         0, 5, 0, 1, 0, 0, 0, 0, 0,  //
         0, 0, 0, 0, 2, 0, 0, 0, 9,  //
@@ -117,17 +117,17 @@ TEST(test_solve, complex_solve2)
         0, 0, 0, 0, 0, 7, 0, 8, 0,  //
         8, 0, 9, 0, 0, 2, 7, 0, 0,  //
     });
-    std::cout << board << std::endl;
+    std::cout << grid << std::endl;
     HeurList hlist = {heur_exclu, heur_single_choice};
-    auto note = init_note(board, hlist);
+    auto note = init_note(grid, hlist);
     std::cout << note << std::endl;
-    ASSERT_TRUE(solve_one(board, note, hlist));
-    std::cout << board << std::endl;
+    ASSERT_TRUE(solve_one(grid, note, hlist));
+    std::cout << grid << std::endl;
 }
 
 TEST(test_solve, all_levels)
 {
-    Board b_easy({
+    Grid b_easy({
         2, 0, 7, 0, 0, 3, 0, 0, 4,  //
         0, 0, 4, 0, 1, 5, 0, 0, 3,  //
         1, 0, 3, 0, 0, 0, 0, 7, 8,  //
@@ -139,7 +139,7 @@ TEST(test_solve, all_levels)
         5, 0, 0, 9, 0, 0, 7, 0, 6   //
     });
 
-    Board b_medium({
+    Grid b_medium({
         9, 0, 7, 3, 0, 0, 0, 5, 0,  //
         0, 8, 0, 0, 9, 0, 2, 0, 3,  //
         0, 0, 3, 8, 0, 0, 1, 4, 0,  //
@@ -152,7 +152,7 @@ TEST(test_solve, all_levels)
         8, 0, 5, 0, 7, 0, 0, 6, 0,  //
         0, 6, 0, 0, 0, 4, 5, 0, 7,  //
     });
-    Board b_hard({
+    Grid b_hard({
         0, 7, 5, 4, 0, 6, 0, 0, 0,  //
         0, 0, 8, 0, 0, 2, 9, 0, 0,  //
         2, 0, 0, 0, 0, 0, 4, 6, 0,  //
@@ -166,7 +166,7 @@ TEST(test_solve, all_levels)
         0, 0, 0, 9, 0, 4, 1, 7, 0,  //
     });
 
-    Board b_evil({
+    Grid b_evil({
         3, 0, 0, 0, 7, 4, 0, 0, 0,  //
         0, 4, 0, 8, 5, 0, 7, 0, 0,  //
         0, 8, 0, 0, 0, 2, 0, 0, 0,  //

@@ -1,9 +1,21 @@
 #pragma once
-#include "board.hpp"
+#include "grid.hpp"
 #include "heur.hpp"
 
-BoardNote init_note(const Board& board, const HeurList& hlist);
-bool solve_one(Board& board, BoardNote& note, const HeurList& hlist);
-bool solve_one(Board& board);
-uint grade(Board& board, uint& sol_count);
+GridNote init_note(const Grid& grid, const HeurList& hlist);
+bool solve_one(Grid& grid, GridNote& note, const HeurList& hlist);
+bool solve_one(Grid& grid);
+struct GradeResult
+{
+    uint score;
+    uint sol_count;
+};
+GradeResult grade(Grid grid);
 
+Grid rand_grid_starter();
+
+Grid rand_grid();
+
+Grid gen_puzzle();
+
+Grid gen_puzzle(uint min_score, uint max_iter);

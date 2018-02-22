@@ -1,8 +1,8 @@
 #include "heur.hpp"
 
-void heur_exclu(const Board& board, uint id, uint jd, BoardNote& note)
+void heur_exclu(const Grid& grid, uint id, uint jd, GridNote& note)
 {
-    uint val = board(id, jd);
+    uint val = grid(id, jd);
     for (uint k = 0; k < dim; k++)
     {
         note(id, k).remove(val);
@@ -17,9 +17,9 @@ void heur_exclu(const Board& board, uint id, uint jd, BoardNote& note)
     }
 }
 
-void heur_single_choice(const Board& board, uint id, uint jd, BoardNote& note)
+void heur_single_choice(const Grid& grid, uint id, uint jd, GridNote& note)
 {
-    uint val = board(id, jd);
+    uint val = grid(id, jd);
     // row
     for (uint i = 0; i < dim; i++)
     {
@@ -27,7 +27,7 @@ void heur_single_choice(const Board& board, uint id, uint jd, BoardNote& note)
         uint last_j = 0;
         for (uint j = 0; j < dim; j++)
         {
-            if (board(i, j) == 0 && note(i, j).has(val))
+            if (grid(i, j) == 0 && note(i, j).has(val))
             {
                 last_j = j;
                 count += 1;
@@ -46,7 +46,7 @@ void heur_single_choice(const Board& board, uint id, uint jd, BoardNote& note)
         uint last_i = 0;
         for (uint i = 0; i < dim; i++)
         {
-            if (board(i, j) == 0 && note(i, j).has(val))
+            if (grid(i, j) == 0 && note(i, j).has(val))
             {
                 last_i = i;
                 count += 1;
@@ -77,7 +77,7 @@ void heur_single_choice(const Board& board, uint id, uint jd, BoardNote& note)
             {
                 uint i = vbi * order + ii;
                 uint j = bj * order + jj;
-                if (board(i, j) == 0 && note(i, j).has(val))
+                if (grid(i, j) == 0 && note(i, j).has(val))
                 {
                     last_i = i;
                     last_j = j;
@@ -107,7 +107,7 @@ void heur_single_choice(const Board& board, uint id, uint jd, BoardNote& note)
             {
                 uint i = bi * order + ii;
                 uint j = vbj * order + jj;
-                if (board(i, j) == 0 && note(i, j).has(val))
+                if (grid(i, j) == 0 && note(i, j).has(val))
                 {
                     last_i = i;
                     last_j = j;

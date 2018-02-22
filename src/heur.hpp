@@ -1,7 +1,7 @@
 #pragma once
-#include "board.hpp"
+#include "grid.hpp"
 
-typedef void (*HeurFunc)(const Board& board, uint id, uint jd, BoardNote& note);
+typedef void (*HeurFunc)(const Grid& grid, uint id, uint jd, GridNote& note);
 using HeurList = std::vector<HeurFunc>;
-void heur_exclu(const Board& board, uint id, uint jd, BoardNote& note);
-void heur_single_choice(const Board& board, uint id, uint jd, BoardNote& note);
+void heur_exclu(const Grid& grid, uint id, uint jd, GridNote& note);
+void heur_single_choice(const Grid& grid, uint id, uint jd, GridNote& note);

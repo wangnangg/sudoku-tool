@@ -8,15 +8,22 @@ const uint order = 3;
 const uint dim = order * order;
 
 template <typename CELL>
-class BoardTmpl
+class GridTmpl
 {
 public:
     using Cell = CELL;
 private:
     std::vector<Cell> _cells;
 public:
-    BoardTmpl(): _cells(dim * dim) {}
-    BoardTmpl(std::vector<Cell> val) : _cells(std::move(val)) {}
+    GridTmpl(): _cells(dim * dim) {}
+    GridTmpl(std::vector<Cell> val) : _cells(std::move(val)) {}
+    GridTmpl(Cell cell_init)
+    {
+        for(uint i=0; i<dim*dim; i++)
+        {
+            _cells.push_back(cell_init);
+        }
+    }
     const Cell& operator()(size_t i, size_t j) const
     {
         assert(i < dim);
@@ -75,6 +82,23 @@ public:
         assert(val >= 1 && val <= dim);
         return _poss_set[val - 1];
     }
+    uint at(uint idx) const
+    {
+        for(uint i=0; i<dim; i++)
+        {
+            if(_poss_set[i])
+            {
+                if(idx == 0)
+                {
+                    return i + 1;
+                } else {
+                    idx -= 1;
+                }
+            }
+        }
+        assert(false);
+        return 0;
+    }
     uint count() const
     {
         return _count;
@@ -83,10 +107,12 @@ public:
 
 
 
-using Board = BoardTmpl<uint>;
-using BoardNote = BoardTmpl<CellNote>;
+using Grid = GridTmpl<uint>;
+using GridNote = GridTmpl<CellNote>;
 
 
-std::ostream& operator<<(std::ostream& os, const Board& board);
-std::ostream& operator<<(std::ostream& os, const BoardNote& note);
-Board create_board(const std::vector<uint>& val);
+std::ostream& operator<<(std::ostream& os, const Grid& grid);
+std::ostream& operator<<(std::ostream& os, const GridNote& note);
+Grid create_grid(const std::vector<uint>& val);
+
+void simple_print(std::ostream& os,  const Grid& grid);

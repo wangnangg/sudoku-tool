@@ -1,6 +1,6 @@
-#include "board.hpp"
+#include "grid.hpp"
 
-std::ostream& operator<<(std::ostream& os, const Board& board)
+std::ostream& operator<<(std::ostream& os, const Grid& grid)
 {
     os << "-----------------------------------" << std::endl;
     for (uint i = 0; i < dim; i++)
@@ -8,7 +8,7 @@ std::ostream& operator<<(std::ostream& os, const Board& board)
         os << "| ";
         for (uint j = 0; j < dim; j++)
         {
-            os << ' ' << board(i, j) << ' ';
+            os << ' ' << grid(i, j) << ' ';
             if (j % order == order - 1)
             {
                 os << " |";
@@ -23,7 +23,26 @@ std::ostream& operator<<(std::ostream& os, const Board& board)
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const BoardNote& note)
+
+void simple_print(std::ostream& os,  const Grid& grid)
+{
+    for (uint i = 0; i < dim; i++)
+    {
+        for (uint j = 0; j < dim; j++)
+        {
+            if(grid(i, j) == 0)
+            {
+                os << '_' << ' ';
+            } else
+            {
+                os << grid(i, j) << ' ';
+            }
+        }
+        os << std::endl;
+    }
+}
+
+std::ostream& operator<<(std::ostream& os, const GridNote& note)
 {
     os << "----------------------------------------------------------"
        << std::endl;
