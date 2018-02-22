@@ -23,17 +23,17 @@ std::ostream& operator<<(std::ostream& os, const Grid& grid)
     return os;
 }
 
-
-void simple_print(std::ostream& os,  const Grid& grid)
+void simple_print(std::ostream& os, const Grid& grid)
 {
     for (uint i = 0; i < dim; i++)
     {
         for (uint j = 0; j < dim; j++)
         {
-            if(grid(i, j) == 0)
+            if (grid(i, j) == 0)
             {
                 os << '_' << ' ';
-            } else
+            }
+            else
             {
                 os << grid(i, j) << ' ';
             }
@@ -41,4 +41,3 @@ void simple_print(std::ostream& os,  const Grid& grid)
         os << std::endl;
     }
 }
-

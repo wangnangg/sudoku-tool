@@ -21,7 +21,7 @@ std::ostream& operator<<(std::ostream& os, const GridNote& note)
             {
                 os << ' ';
             }
-            if( jj % order == order - 1)
+            if (jj % order == order - 1)
             {
                 os << " | ";
             }
@@ -31,7 +31,7 @@ std::ostream& operator<<(std::ostream& os, const GridNote& note)
             }
         }
         os << std::endl;
-        if( ii % order == order - 1)
+        if (ii % order == order - 1)
         {
             os << "----------------------------------------------------------"
                << std::endl;

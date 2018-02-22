@@ -1,6 +1,6 @@
-#include "algo.hpp"
 #include <cstdlib>
 #include <ctime>
+#include "algo.hpp"
 
 bool srand_init = false;
 uint randint(uint N)
@@ -207,7 +207,7 @@ Grid rand_grid()
     return grid;
 }
 
-//0: no solution, 1: single solution 2: more than one
+// 0: no solution, 1: single solution 2: more than one
 uint is_proper_puzzle(Grid& grid, GridNote& note, const HeurList& hlist)
 {
     uint min_i = 0;
@@ -266,7 +266,7 @@ uint is_proper_puzzle(Grid& grid, GridNote& note, const HeurList& hlist)
                 h(grid, min_i, min_j, note);
             }
             sol_count += is_proper_puzzle(grid, note, hlist);
-            if(sol_count >= 2)
+            if (sol_count >= 2)
             {
                 break;
             }
@@ -310,14 +310,13 @@ Grid gen_puzzle()
     return grid;
 }
 
-
 uint dist(uint min, uint max, uint target)
 {
-    if(target > max)
+    if (target > max)
     {
         return target - max;
     }
-    if(target < min)
+    if (target < min)
     {
         return min - target;
     }
@@ -333,7 +332,7 @@ Grid gen_puzzle(uint min_score, uint max_score, uint max_iter)
     }
     Grid best;
     uint best_s = 10000;
-    for(uint i = 0; i < max_iter; i++)
+    for (uint i = 0; i < max_iter; i++)
     {
         permute(perm);
         Grid grid = sol_grid;
@@ -352,12 +351,12 @@ Grid gen_puzzle(uint min_score, uint max_score, uint max_iter)
             }
         }
         auto res = grade(grid);
-        if(dist(min_score, max_score, res.score) < best_s)
+        if (dist(min_score, max_score, res.score) < best_s)
         {
             best = grid;
             best_s = dist(min_score, max_score, res.score);
         }
-        if(best_s == 0)
+        if (best_s == 0)
         {
             break;
         }

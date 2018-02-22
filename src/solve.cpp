@@ -1,6 +1,6 @@
-#include "algo.hpp"
 #include <cstdlib>
 #include <ctime>
+#include "algo.hpp"
 bool solve_one(Grid& grid, GridNote& note, const HeurList& hlist)
 {
 #ifndef NDEBUG

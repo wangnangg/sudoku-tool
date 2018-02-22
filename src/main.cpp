@@ -3,10 +3,10 @@
  * ./sdtool count_sol [sudoku]
  * ./sdtool hint [sudoku]
  */
+#include <cstdlib>
 #include <exception>
 #include <iostream>
 #include <string>
-#include <cstdlib>
 #include "sudoku.hpp"
 
 class ArgException : public std::exception
@@ -15,7 +15,8 @@ class ArgException : public std::exception
 
 void print_help()
 {
-    std::cout << "sdtool generate [num] [min_level] [max_level] [max_iter]" << std::endl;
+    std::cout << "sdtool generate [num] [min_level] [max_level] [max_iter]"
+              << std::endl;
     std::cout << "sdtool count_sol [sudoku]" << std::endl;
     std::cout << "sdtool grade [sudoku]" << std::endl;
     std::cout << "sdtool solve [sudoku]" << std::endl;
@@ -25,9 +26,9 @@ void print_help()
 }
 void print_grid(const Grid& grid)
 {
-    for(uint i=0; i<dim; i++)
+    for (uint i = 0; i < dim; i++)
     {
-        for(uint j=0; j<dim;j++)
+        for (uint j = 0; j < dim; j++)
         {
             std::cout << grid(i, j);
         }
@@ -36,13 +37,13 @@ void print_grid(const Grid& grid)
 Grid parse_grid(const std::string& str)
 {
     Grid grid;
-    if(str.length() != 81)
+    if (str.length() != 81)
     {
         throw ArgException();
     }
-    for(uint i=0; i<str.length(); i++)
+    for (uint i = 0; i < str.length(); i++)
     {
-        if(str[i] < '0' || str[i] > '9')
+        if (str[i] < '0' || str[i] > '9')
         {
             throw ArgException();
         }
@@ -67,10 +68,10 @@ int main(int argc, char* argv[])
                 throw ArgException();
             }
             uint num = (uint)std::stoi(argv[2]);
-            uint min_level =(uint)std::stoi(argv[3]);
+            uint min_level = (uint)std::stoi(argv[3]);
             uint max_level = (uint)std::stoi(argv[4]);
             uint max_iter = (uint)std::stoi(argv[5]);
-            for(uint i=0; i<num; i++)
+            for (uint i = 0; i < num; i++)
             {
                 Grid grid = gen_puzzle(min_level, max_level, max_iter);
                 auto res = grade(grid);
@@ -92,7 +93,7 @@ int main(int argc, char* argv[])
             auto res = grade(grid);
             std::cout << res.sol_count << std::endl;
         }
-        else if(action == "solve")
+        else if (action == "solve")
         {
             if (argc < 3)
             {
@@ -102,7 +103,8 @@ int main(int argc, char* argv[])
             solve_one(grid);
             print_grid(grid);
             std::cout << std::endl;
-        } else if(action == "grade")
+        }
+        else if (action == "grade")
         {
             if (argc < 3)
             {

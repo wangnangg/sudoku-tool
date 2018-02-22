@@ -5,20 +5,23 @@ class CellNote
 {
     std::vector<bool> _poss_set;
     uint _count;
+
 public:
     CellNote(bool full = false) : _poss_set(dim, full)
     {
-        if(full)
+        if (full)
         {
             _count = 9;
-        } else {
+        }
+        else
+        {
             _count = 0;
         }
     }
     void add(uint val)
     {
         assert(val <= dim);
-        if(_poss_set[val - 1])
+        if (_poss_set[val - 1])
         {
             return;
         }
@@ -28,7 +31,7 @@ public:
     void remove(uint val)
     {
         assert(val <= dim);
-        if(!_poss_set[val - 1])
+        if (!_poss_set[val - 1])
         {
             return;
         }
@@ -47,14 +50,16 @@ public:
     }
     uint at(uint idx) const
     {
-        for(uint i=0; i<dim; i++)
+        for (uint i = 0; i < dim; i++)
         {
-            if(_poss_set[i])
+            if (_poss_set[i])
             {
-                if(idx == 0)
+                if (idx == 0)
                 {
                     return i + 1;
-                } else {
+                }
+                else
+                {
                     idx -= 1;
                 }
             }
@@ -62,10 +67,7 @@ public:
         assert(false);
         return 0;
     }
-    uint count() const
-    {
-        return _count;
-    }
+    uint count() const { return _count; }
 };
 
 uint find_first(const CellNote& cn);
