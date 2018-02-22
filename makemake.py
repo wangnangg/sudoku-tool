@@ -120,7 +120,9 @@ endif
 ]
 makefile_major_targets = [
     """
-.PHONY: utest
+.PHONY: all sdtool utest
+all: sdtool utest
+sdtool: ${build_dir}/sdtool
 utest: ${build_dir}/utest
 """
 ]
@@ -154,8 +156,13 @@ for i in range(0, len(gtest_src_files)):
 
 makefile_body.append(
     link_rule(linker, "${link_flags}",
-              obj_files + test_obj_files + gtest_obj_files,
+              list(filter(lambda f: not f.endswith('main.o'), obj_files)) + test_obj_files + gtest_obj_files,
               '${build_dir}/utest'))
+
+makefile_body.append(
+    link_rule(linker, "${link_flags}",
+              obj_files,
+              '${build_dir}/sdtool'))
 
 deps = list2makestr(
     map(lambda obj: change_ext(obj, '.d'),

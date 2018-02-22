@@ -1,4 +1,89 @@
 #include "heur.hpp"
+std::ostream& operator<<(std::ostream& os, const GridNote& note)
+{
+    os << "----------------------------------------------------------"
+       << std::endl;
+    for (uint ii = 0; ii < dim * order; ii++)
+    {
+        os << "| ";
+        uint i = ii / order;
+        for (uint jj = 0; jj < dim * order; jj++)
+        {
+            uint j = jj / order;
+            uint bi = ii % order;
+            uint bj = jj % order;
+            uint val = bi * order + bj + 1;
+            if (note(i, j).has(val))
+            {
+                os << val;
+            }
+            else
+            {
+                os << ' ';
+            }
+            if( jj % order == order - 1)
+            {
+                os << " | ";
+            }
+            if (jj % (order * order) == (order * order) - 1)
+            {
+                os << "\b| ";
+            }
+        }
+        os << std::endl;
+        if( ii % order == order - 1)
+        {
+            os << "----------------------------------------------------------"
+               << std::endl;
+        }
+        if (ii % (order * order) == (order * order) - 1)
+        {
+            os << "----------------------------------------------------------"
+               << std::endl;
+        }
+    }
+    return os;
+}
+GridNote init_note(const Grid& grid, const HeurList& hlist)
+{
+    GridNote note;
+    for (uint i = 0; i < dim; i++)
+    {
+        for (uint j = 0; j < dim; j++)
+        {
+            if (grid(i, j) == 0)
+            {
+                note(i, j) = CellNote(true);
+            }
+        }
+    }
+    for (const auto& h : hlist)
+    {
+        for (uint i = 0; i < dim; i++)
+        {
+            for (uint j = 0; j < dim; j++)
+            {
+                if (grid(i, j) != 0)
+                {
+                    h(grid, i, j, note);
+                }
+            }
+        }
+    }
+
+    return note;
+}
+uint find_first(const CellNote& cn)
+{
+    for (uint i = 1; i <= dim; i++)
+    {
+        if (cn.has(i))
+        {
+            return i;
+        }
+    }
+    return 0;
+}
 
 void heur_exclu(const Grid& grid, uint id, uint jd, GridNote& note)
 {

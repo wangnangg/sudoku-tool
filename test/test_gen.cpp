@@ -173,8 +173,9 @@ TEST(test_gen, gen_puzzle)
 TEST(test_gen, gen_puzzle_min_score_100)
 {
     uint min_s = 100;
+    uint max_s = 200;
     uint max_iter = 10000;
-    Grid grid = gen_puzzle(min_s, max_iter);
+    Grid grid = gen_puzzle(min_s, max_s, max_iter);
     auto g = grade(grid);
     simple_print(std::cout, grid);
     std::cout << g.score << std::endl;
@@ -184,8 +185,9 @@ TEST(test_gen, gen_puzzle_min_score_100)
 TEST(test_gen, gen_puzzle_min_score_200)
 {
     uint min_s = 200;
+    uint max_s = 500;
     uint max_iter = 10000;
-    Grid grid = gen_puzzle(min_s, max_iter);
+    Grid grid = gen_puzzle(min_s, max_s, max_iter);
     auto g = grade(grid);
     simple_print(std::cout, grid);
     std::cout << g.score << std::endl;
@@ -195,8 +197,9 @@ TEST(test_gen, gen_puzzle_min_score_200)
 TEST(test_gen, gen_puzzle_min_score_500)
 {
     uint min_s = 500;
+    uint max_s = 1000;
     uint max_iter = 10000;
-    Grid grid = gen_puzzle(min_s, max_iter);
+    Grid grid = gen_puzzle(min_s, max_s, max_iter);
     auto g = grade(grid);
     simple_print(std::cout, grid);
     std::cout << g.score << std::endl;
@@ -206,8 +209,9 @@ TEST(test_gen, gen_puzzle_min_score_500)
 TEST(test_gen, gen_puzzle_min_score_1000)
 {
     uint min_s = 1000;
+    uint max_s = 2000;
     uint max_iter = 10000;
-    Grid grid = gen_puzzle(min_s, max_iter);
+    Grid grid = gen_puzzle(min_s, max_s, max_iter);
     auto g = grade(grid);
     simple_print(std::cout, grid);
     std::cout << g.score << std::endl;
@@ -217,8 +221,9 @@ TEST(test_gen, gen_puzzle_min_score_1000)
 TEST(test_gen, gen_puzzle_min_score_3000)
 {
     uint min_s = 3000;
+    uint max_s = 10000;
     uint max_iter = 10000;
-    Grid grid = gen_puzzle(min_s, max_iter);
+    Grid grid = gen_puzzle(min_s, max_s, max_iter);
     auto g = grade(grid);
     simple_print(std::cout, grid);
     std::cout << g.score << std::endl;

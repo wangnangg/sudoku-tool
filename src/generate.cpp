@@ -1,230 +1,6 @@
 #include "algo.hpp"
 #include <cstdlib>
 #include <ctime>
-GridNote init_note(const Grid& grid, const HeurList& hlist)
-{
-    GridNote note;
-    for (uint i = 0; i < dim; i++)
-    {
-        for (uint j = 0; j < dim; j++)
-        {
-            if (grid(i, j) == 0)
-            {
-                note(i, j) = CellNote(true);
-            }
-        }
-    }
-    for (const auto& h : hlist)
-    {
-        for (uint i = 0; i < dim; i++)
-        {
-            for (uint j = 0; j < dim; j++)
-            {
-                if (grid(i, j) != 0)
-                {
-                    h(grid, i, j, note);
-                }
-            }
-        }
-    }
-
-    return note;
-}
-
-uint find_first(const CellNote& cn)
-{
-    for (uint i = 1; i <= dim; i++)
-    {
-        if (cn.has(i))
-        {
-            return i;
-        }
-    }
-    return 0;
-}
-
-bool solve_one(Grid& grid, GridNote& note, const HeurList& hlist)
-{
-#ifndef NDEBUG
-    std::cout << grid << std::endl;
-    std::cout << note << std::endl;
-#endif
-    uint min_i = 0;
-    uint min_j = 0;
-    uint min = dim + 1;
-    for (uint i = 0; i < dim; i++)
-    {
-        for (uint j = 0; j < dim; j++)
-        {
-            if (grid(i, j) == 0)
-            {
-                if (note(i, j).count() == 0)
-                {
-                    return false;  // no solution is possible
-                }
-                else if (note(i, j).count() == 1)
-                {
-                    // simple case
-                    grid(i, j) = find_first(note(i, j));
-                    for (const auto& h : hlist)
-                    {
-                        h(grid, i, j, note);
-                    }
-                    return solve_one(grid, note, hlist);
-                }
-                else
-                {
-                    if (min > note(i, j).count())
-                    {
-                        min = note(i, j).count();
-                        min_i = i;
-                        min_j = j;
-                    }
-                }
-            }
-        }
-    }
-    if (min == dim + 1)
-    {
-        // solved
-        return true;
-    }
-
-    const Grid saved_grid = grid;
-    const GridNote saved_note = note;
-    const auto& cellnote = saved_note(min_i, min_j);
-    // try every possible values
-    for (uint k = 1; k <= dim; k++)
-    {
-        if (cellnote.has(k))
-        {
-            grid(min_i, min_j) = k;
-            for (const auto& h : hlist)
-            {
-                h(grid, min_i, min_j, note);
-            }
-            if (solve_one(grid, note, hlist))
-            {
-                return true;
-            }
-            grid = saved_grid;
-            note = saved_note;
-        }
-    }
-    return false;
-}
-
-bool solve_one(Grid& grid)
-{
-    HeurList hlist = {heur_exclu, heur_single_choice};
-    auto note = init_note(grid, hlist);
-    return solve_one(grid, note, hlist);
-}
-
-class SolutionRecord
-{
-public:
-    struct Node
-    {
-        std::vector<uint> children;
-    };
-
-private:
-    std::vector<Node> _node_list;
-
-public:
-    SolutionRecord() : _node_list(1) {}
-    uint add_child(uint parent)
-    {
-        uint nid = _node_list.size();
-        _node_list.push_back(Node{});
-        _node_list[parent].children.push_back(nid);
-        return nid;
-    }
-    const std::vector<uint>& children(uint nid) const
-    {
-        return _node_list[nid].children;
-    }
-    uint root() const { return 0; }
-    uint node_count() const { return _node_list.size(); }
-};
-
-uint record_solution(Grid& grid, GridNote& note, const HeurList& hlist,
-                     SolutionRecord& record, uint nid)
-{
-    uint min_i = 0;
-    uint min_j = 0;
-    uint min = dim + 1;
-    for (uint i = 0; i < dim; i++)
-    {
-        for (uint j = 0; j < dim; j++)
-        {
-            if (grid(i, j) == 0)
-            {
-                if (note(i, j).count() == 0)
-                {
-                    return 0;  // no solution is possible
-                }
-                else if (note(i, j).count() == 1)
-                {
-                    // simple case
-                    grid(i, j) = find_first(note(i, j));
-                    for (const auto& h : hlist)
-                    {
-                        h(grid, i, j, note);
-                    }
-                    uint child = record.add_child(nid);
-                    return record_solution(grid, note, hlist, record, child);
-                }
-                else
-                {
-                    if (min > note(i, j).count())
-                    {
-                        min = note(i, j).count();
-                        min_i = i;
-                        min_j = j;
-                    }
-                }
-            }
-        }
-    }
-    if (min == dim + 1)
-    {
-        // solved
-        return 1;
-    }
-
-    const Grid saved_grid = grid;
-    const GridNote saved_note = note;
-    const auto& cellnote = saved_note(min_i, min_j);
-    // try every possible values
-    uint sol_count = 0;
-    for (uint k = 1; k <= dim; k++)
-    {
-        if (cellnote.has(k))
-        {
-            grid(min_i, min_j) = k;
-            for (const auto& h : hlist)
-            {
-                h(grid, min_i, min_j, note);
-            }
-
-            uint child = record.add_child(nid);
-            sol_count += record_solution(grid, note, hlist, record, child);
-            grid = saved_grid;
-            note = saved_note;
-        }
-    }
-    return sol_count;
-}
-GradeResult grade(Grid grid)
-{
-    SolutionRecord record;
-    HeurList hlist = {heur_exclu, heur_single_choice};
-    auto note = init_note(grid, hlist);
-    uint sol_count = record_solution(grid, note, hlist, record, record.root());
-    return {record.node_count(), sol_count};
-}
 
 bool srand_init = false;
 uint randint(uint N)
@@ -535,7 +311,19 @@ Grid gen_puzzle()
 }
 
 
-Grid gen_puzzle(uint min_score, uint max_iter)
+uint dist(uint min, uint max, uint target)
+{
+    if(target > max)
+    {
+        return target - max;
+    }
+    if(target < min)
+    {
+        return min - target;
+    }
+    return 0;
+}
+Grid gen_puzzle(uint min_score, uint max_score, uint max_iter)
 {
     const Grid sol_grid = rand_grid();
     auto perm = std::vector<uint>();
@@ -544,7 +332,7 @@ Grid gen_puzzle(uint min_score, uint max_iter)
         perm.push_back(i);
     }
     Grid best;
-    uint best_s = 0;
+    uint best_s = 10000;
     for(uint i = 0; i < max_iter; i++)
     {
         permute(perm);
@@ -564,12 +352,12 @@ Grid gen_puzzle(uint min_score, uint max_iter)
             }
         }
         auto res = grade(grid);
-        if(res.score > best_s)
+        if(dist(min_score, max_score, res.score) < best_s)
         {
             best = grid;
-            best_s = res.score;
+            best_s = dist(min_score, max_score, res.score);
         }
-        if(best_s >= min_score)
+        if(best_s == 0)
         {
             break;
         }

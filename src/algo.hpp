@@ -2,7 +2,6 @@
 #include "grid.hpp"
 #include "heur.hpp"
 
-GridNote init_note(const Grid& grid, const HeurList& hlist);
 bool solve_one(Grid& grid, GridNote& note, const HeurList& hlist);
 bool solve_one(Grid& grid);
 struct GradeResult
@@ -18,4 +17,4 @@ Grid rand_grid();
 
 Grid gen_puzzle();
 
-Grid gen_puzzle(uint min_score, uint max_iter);
+Grid gen_puzzle(uint min_score, uint max_score, uint max_iter);
